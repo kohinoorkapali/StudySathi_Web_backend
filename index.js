@@ -6,6 +6,8 @@ import authRouter from "./src/Routes/authRoutes.js";
 import studyMaterialRouter from "./src/Routes/studyMaterialRoutes.js";
 import path from "path"; 
 import "./src/Model/userModel.js";
+import { createAdminIfNotExists } from "./src/Model/createAmin.js";
+import { sequelize } from "./src/Database/db.js";
 
 const app = express();
 
@@ -21,12 +23,23 @@ app.use(express.json());
 app.use("/uploads/materials", express.static(path.join("./uploads/materials")));
 app.use("/uploads/profiles", express.static(path.join("./uploads/profiles")));
 
+
 // DB connection
 connection()
   .then(async () => {
-    console.log("Database connected");
+    console.log("✅ Database connected");
+
+    // Sync all models AFTER DB connection
+    await sequelize.sync({ alter: true });
+    console.log("✅ Database synced with role column");
+
+    // Create admin if not exists
+    await createAdminIfNotExists();
+
+    // Start server AFTER everything is ready
+    app.listen(5000, () => console.log("✅ Server running on port 5000"));
   })
-  .catch((err) => console.error("DB connection failed:", err));
+  .catch((err) => console.error("❌ DB connection failed:", err));
 
 // Routes
 app.use("/api/users", userRouter);

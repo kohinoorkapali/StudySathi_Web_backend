@@ -64,12 +64,11 @@ export const getAllMaterials = async (req, res) => {
       include: [
         {
           model: User,
-          attributes: ["fullname", "username"], // get author info
+          attributes: ["fullname", "username"], // author info
         },
       ],
     });
 
-    // Map results to include author
     const result = materials.map((m) => ({
       id: m.id,
       title: m.title,
@@ -77,6 +76,8 @@ export const getAllMaterials = async (req, res) => {
       stream: m.stream,
       createdAt: m.createdAt,
       author: m.User?.username || "Unknown",
+      file_path: m.file_path,    // ✅ send file path
+      file_type: m.file_type,    // ✅ send MIME type
     }));
 
     res.status(200).send({ data: result });
@@ -84,6 +85,7 @@ export const getAllMaterials = async (req, res) => {
     res.status(500).send({ message: e.message });
   }
 };
+
 
 // Get only materials uploaded by the logged-in user
 export const getMyMaterials = async (req, res) => {
@@ -108,6 +110,8 @@ export const getMyMaterials = async (req, res) => {
       stream: m.stream,
       createdAt: m.createdAt,
       author: m.User?.fullname || "You",
+      file_path: m.file_path,    // ✅ send file path
+      file_type: m.file_type,    // ✅ send MIME type
     }));
 
     res.status(200).send({ data: result });
@@ -115,6 +119,7 @@ export const getMyMaterials = async (req, res) => {
     res.status(500).send({ message: e.message });
   }
 };
+
 
 export const deleteMaterial = async (req, res) => {
   try {
