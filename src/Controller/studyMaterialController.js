@@ -115,3 +115,49 @@ export const getMyMaterials = async (req, res) => {
     res.status(500).send({ message: e.message });
   }
 };
+
+export const deleteMaterial = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the material
+    const material = await StudyMaterial.findByPk(id);
+    if (!material) return res.status(404).send({ message: "Material not found" });
+
+    // Delete file from disk
+    const filePath = path.resolve("./uploads/materials", material.file_path);
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    // Delete DB record
+    await material.destroy();
+
+    res.status(200).send({ message: "Material deleted successfully" });
+  } catch (err) {
+    console.error("Delete error:", err);
+    res.status(500).send({ message: err.message });
+  }
+};
+
+export const updateMaterial = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, stream } = req.body;
+
+    const material = await StudyMaterial.findByPk(id);
+    if (!material) return res.status(404).send({ message: "Material not found" });
+
+    // Update fields
+    material.title = title || material.title;
+    material.description = description || material.description;
+    material.stream = stream || material.stream;
+
+    await material.save();
+
+    res.status(200).send({ message: "Material updated successfully", data: material });
+  } catch (err) {
+    console.error("Update error:", err);
+    res.status(500).send({ message: err.message });
+  }
+};

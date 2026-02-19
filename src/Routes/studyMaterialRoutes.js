@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { uploadMaterial, getAllMaterials, getMyMaterials, downloadMaterial } from "../Controller/studyMaterialController.js";
+import { uploadMaterial, getAllMaterials, getMyMaterials, downloadMaterial, deleteMaterial, updateMaterial   } from "../Controller/studyMaterialController.js";
 
 const router = express.Router();
 
@@ -19,6 +19,7 @@ router.post("/", upload.single("file"), uploadMaterial); // removed /upload
 router.get("/", getAllMaterials);
 router.get("/my", getMyMaterials);
 router.get("/download/:id", downloadMaterial);
-
+router.delete("/:id", deleteMaterial);
+router.put("/:id", updateMaterial);
 
 export default router;
