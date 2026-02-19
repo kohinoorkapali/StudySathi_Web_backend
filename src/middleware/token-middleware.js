@@ -6,6 +6,7 @@ dotenv.config();
 export function authenticateToken(req, res, next) {
   // Skip token verification for the login route
   if (req.path === "/api/auth/login") {
+    console.log("the login has been hit.")
     return next();
   }
 

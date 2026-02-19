@@ -27,19 +27,12 @@ app.use("/uploads/profiles", express.static(path.join("./uploads/profiles")));
 // DB connection
 connection()
   .then(async () => {
-    console.log("✅ Database connected");
-
-    // Sync all models AFTER DB connection
     await sequelize.sync({ alter: true });
-    console.log("✅ Database synced with role column");
 
-    // Create admin if not exists
     await createAdminIfNotExists();
-
-    // Start server AFTER everything is ready
-    app.listen(5000, () => console.log("✅ Server running on port 5000"));
+    app.listen(5000, () => console.log("Server running on port 5000"));
   })
-  .catch((err) => console.error("❌ DB connection failed:", err));
+  .catch((err) => console.error("DB connection failed:", err));
 
 // Routes
 app.use("/api/users", userRouter);
