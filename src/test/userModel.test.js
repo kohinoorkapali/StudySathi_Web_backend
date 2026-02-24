@@ -1,34 +1,43 @@
-const SequelizeMock = require("sequelize-mock");
+// src/test/userModel.test.js
+import { jest } from "@jest/globals"; // ✅ needed for ESM
+import SequelizeMock from "sequelize-mock";
+
 const dbMock = new SequelizeMock();
- const UserMock = dbMock.define('User',{
-    id : 1,
-    fullname: 'Test product',
-    username:'kohinoor',
-    email: 'kohinoor@gmail.com',
-    password: '123456',
- })
 
-describe ('User Model', () =>{
-    it ('should register a person', async () =>{
-        const user = await UserMock.create({
-            fullname: 'New Person',
-            username: 'new',
-            email: 'test@gmail.com',
-            password: '111111'
-        });
+// Define a mock User model
+const UserMock = dbMock.define("User", {
+  id: 1,
+  fullname: "Test product",
+  username: "kohinoor",
+  email: "kohinoor@gmail.com",
+  password: "123456",
+});
 
-        
-expect(user.fullname).toBe('New Person');
-expect(user.username).toBe('new');
-expect(user.email).toBe('test@gmail.com');
-expect(user.password).toBe('111111');
+describe("User Model", () => {
+  beforeEach(() => {
+    jest.clearAllMocks(); // now jest is defined
+  });
 
+  it("should register a person", async () => {
+    const user = await UserMock.create({
+      fullname: "New Person",
+      username: "new",
+      email: "test@gmail.com",
+      password: "111111",
     });
-    
-it ('should require user fullname , username and email and password', async ()=>{
-        await expect(UserMock.create({})).rejects.toThrow();
 
-})
-})
+    expect(user.fullname).toBe("New Person");
+    expect(user.username).toBe("new");
+    expect(user.email).toBe("test@gmail.com");
+    expect(user.password).toBe("111111");
+  });
 
+  it("should require fullname, username, email, and password", async () => {
+    // Force the mock to throw an error for empty object
+    UserMock.create = jest.fn(() => {
+      return Promise.reject(new Error("Validation error"));
+    });
 
+    await expect(UserMock.create({})).rejects.toThrow("Validation error");
+  });
+});
