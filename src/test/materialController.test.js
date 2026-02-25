@@ -14,7 +14,6 @@ await jest.unstable_mockModule("../Model/userModel.js", () => ({
   User: {},
 }));
 
-// ✅ IMPORTANT: fs must be mocked with default for ESM
 await jest.unstable_mockModule("fs", () => ({
   default: {
     existsSync: jest.fn(),
@@ -22,14 +21,13 @@ await jest.unstable_mockModule("fs", () => ({
   },
 }));
 
-// ✅ IMPORTANT: path must be mocked with default for ESM
 await jest.unstable_mockModule("path", () => ({
   default: {
     resolve: jest.fn((...args) => args.join("/")),
   },
 }));
 
-/* -------------------- IMPORT AFTER MOCKS -------------------- */
+/* IMPORT AFTER MOCKS */
 
 const { StudyMaterial } = await import("../Model/studyMaterialModel.js");
 const fs = (await import("fs")).default;
@@ -39,7 +37,7 @@ const materialController = await import(
   "../Controller/studyMaterialController.js"
 );
 
-/* -------------------- TEST SUITE -------------------- */
+/*TEST SUITE */
 
 describe("Material Controller (minimal)", () => {
   beforeEach(() => {

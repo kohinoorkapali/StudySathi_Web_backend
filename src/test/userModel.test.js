@@ -1,5 +1,4 @@
-// src/test/userModel.test.js
-import { jest } from "@jest/globals"; // ✅ needed for ESM
+import { jest } from "@jest/globals";
 import SequelizeMock from "sequelize-mock";
 
 const dbMock = new SequelizeMock();
@@ -15,7 +14,7 @@ const UserMock = dbMock.define("User", {
 
 describe("User Model", () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // now jest is defined
+    jest.clearAllMocks(); 
   });
 
   it("should register a person", async () => {

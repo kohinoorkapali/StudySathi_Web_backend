@@ -1,10 +1,9 @@
-// src/test/userController.test.js
-import { jest } from "@jest/globals"; // needed in ESM
+import { jest } from "@jest/globals"; 
 import bcrypt from "bcryptjs";
 import { User } from "../Model/userModel.js";
 import * as userController from "../Controller/userController.js";
 
-/* ===== Mock Response Helper ===== */
+/*  Mock Response Helper */
 const mockResponse = () => {
   const res = {};
   res.status = jest.fn().mockReturnValue(res);
@@ -17,7 +16,7 @@ describe("User Controller (minimal ESM)", () => {
     jest.clearAllMocks();
   });
 
-  // ===== GET ALL USERS =====
+  // GET ALL USERS 
   it("should return all users", async () => {
     User.findAll = jest.fn().mockResolvedValue([{ id: 1, fullname: "Test" }]);
     const req = {};
@@ -33,7 +32,7 @@ describe("User Controller (minimal ESM)", () => {
     });
   });
 
-  // ===== REGISTER / SAVE USER =====
+  // REGISTER / SAVE USER
   it("should register user successfully", async () => {
     const req = {
       body: {
@@ -85,7 +84,7 @@ describe("User Controller (minimal ESM)", () => {
     expect(res.send).toHaveBeenCalledWith({ message: "Email already registered" });
   });
 
-  // ===== LOGIN =====
+  // LOGIN 
   it("should login successfully", async () => {
     const req = { body: { email: "test@gmail.com", password: "123" } };
     const res = mockResponse();

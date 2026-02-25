@@ -1,4 +1,3 @@
-// src/test/userRoutes.test.js
 import { jest } from "@jest/globals";
 await jest.unstable_mockModule("../Model/userModel.js", () => ({
   User: {

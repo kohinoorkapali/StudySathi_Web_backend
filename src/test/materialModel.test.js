@@ -25,7 +25,6 @@ const StudyMaterialMock = dbMock.define("StudyMaterial", {
   is_reported: false,
 });
 
-// Optional: setup relations in mocks (not strictly needed for unit tests)
 UserMock.hasMany = jest.fn();
 StudyMaterialMock.belongsTo = jest.fn();
 
@@ -51,7 +50,7 @@ describe("StudyMaterial Model", () => {
   });
 
   it("should require title, stream, user_id, file_path, and file_type", async () => {
-    // Force mock to throw for empty object
+
     StudyMaterialMock.create = jest.fn(() => {
       return Promise.reject(new Error("Validation error"));
     });
